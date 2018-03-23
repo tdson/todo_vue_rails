@@ -10,21 +10,15 @@
         </div>
       </div>
     </div>
-    <div>
+    <div id="open-tasks">
       <ul class="collection">
-        <li v-for="task in tasks" v-if="!task.is_done" :id="`row-task-${task.id}`" class="collection-item">
-          <input type="checkbox" :id="`task-${task.id}`" @change="doneTask(task.id)">
-          <label :for="`task-${task.id}`">{{task.name}}</label>
-        </li>
+        <task v-if="!task.is_done" v-for="task in tasks" :key="task.id" :task="task" @task-done="doneTask"></task>
       </ul>
     </div>
     <div class="btn" @click="showFinishedTasks">Show finished tasks</div>
     <div id="finished-tasks" class="display-none">
       <ul class="collection">
-        <li v-for="task in tasks" v-if="task.is_done" :id="`row-task-${task.id}`" class="collection-item">
-          <input type="checkbox" :id="`task-${task.id}`" :checked="task.is_done">
-          <label :for="`task-${task.id}`">{{task.name}}</label>
-        </li>
+        <task v-if="task.is_done" v-for="task in tasks" :key="task.id" :task="task" @task-done="doneTask"></task>
       </ul>
     </div>
   </div>
@@ -32,8 +26,12 @@
 
 <script type="text/javascript">
   import axios from 'axios'
+  import Task from './tasks/task'
 
   export default {
+    components: {
+      Task,
+    },
     data: function () {
       return {
         tasks: [],
@@ -68,21 +66,22 @@
             })
         }
       },
-      doneTask: function(id) {
-        axios.put(`/api/tasks/${id}.json`, {task: {is_done: true}})
+      doneTask: function(task, isDone) {
+        let id = task.id
+        axios.put(`/api/tasks/${id}.json`, {task: {is_done: isDone}})
           .then((response) => {
-            this.moveFinishedTask(id)
+            this.reorderLists(id, isDone)
           }, (error) => {
             console.log(error)
           })
       },
-      moveFinishedTask: function(taskID) {
-        console.log(`Task#${taskID} has been moved to finished.`);
+      reorderLists: function(taskID, isDone) {
         let row = document.querySelector(`#row-task-${taskID}`)
         let clonedRow = row.cloneNode(true)
         row.parentNode.removeChild(row)
-        let finishedList = document.querySelector("#finished-tasks > ul > li:first-child")
-        document.querySelector("#finished-tasks > ul").insertBefore(clonedRow, finishedList)
+        let listID = isDone ? "finished-tasks" : "open-tasks"
+        let finishedList = document.querySelector(`#${listID} > ul > li:first-child`)
+        document.querySelector(`#${listID} > ul`).insertBefore(clonedRow, finishedList)
       },
     },
   }
