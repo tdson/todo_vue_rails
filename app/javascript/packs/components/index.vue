@@ -2,10 +2,10 @@
   <div>
     <div class="row">
       <div class="col s10 m11">
-        <input v-model="newTask" class="form-control" placeholder="Task name">
+        <input v-model="newTask.name" class="form-control" placeholder="Task name">
       </div>
       <div class="col s2 m1">
-        <div class="btn-floating waves-effect waves-light red" @click="createTask">
+        <div class="btn-floating waves-effect waves-light red" @click="createTask(newTask)">
           <i class="material-icons">add</i>
         </div>
       </div>
@@ -27,62 +27,31 @@
 <script type="text/javascript">
   import axios from 'axios'
   import Task from './tasks/task'
+  import {mapGetters, mapActions, mapState} from 'vuex'
 
   export default {
     components: {
       Task,
     },
     data: function () {
-      return {
-        tasks: [],
-        newTask: '',
-      }
+      return {}
     },
     mounted() {
       this.fetchTasks()
     },
+    computed: {
+      // We no need taskList getter so far, Because we use mapState for 'taks'
+      // and get tasks list via this state.
+      ...mapGetters(['taskList']),
+      ...mapState(['tasks', 'newTask']),
+    },
     methods: {
-      fetchTasks: function() {
-        axios.get('/api/tasks.json')
-          .then((response) => {
-            this.tasks = response.data.tasks;
-          }, (error) => {
-            console.log(error);
-          });
-      },
-      showFinishedTasks: function() {
-        document.querySelector('#finished-tasks').classList.toggle('display-none');
-      },
-      createTask: function() {
-        if (!this.newTask) {
-          return
-        } else {
-          axios.post('/api/tasks.json', {task: {name: this.newTask}})
-            .then((response) => {
-              this.tasks.unshift(response.data.task);
-              this.newTask = ""
-            }, (error) => {
-              console.log(error)
-            })
-        }
-      },
-      doneTask: function(task, isDone) {
-        let id = task.id
-        axios.put(`/api/tasks/${id}.json`, {task: {is_done: isDone}})
-          .then((response) => {
-            this.reorderLists(id, isDone)
-          }, (error) => {
-            console.log(error)
-          })
-      },
-      reorderLists: function(taskID, isDone) {
-        let row = document.querySelector(`#row-task-${taskID}`)
-        let clonedRow = row.cloneNode(true)
-        row.parentNode.removeChild(row)
-        let listID = isDone ? "finished-tasks" : "open-tasks"
-        let finishedList = document.querySelector(`#${listID} > ul > li:first-child`)
-        document.querySelector(`#${listID} > ul`).insertBefore(clonedRow, finishedList)
-      },
+      ...mapActions([
+        'fetchTasks',
+        'showFinishedTasks',
+        'createTask',
+        'doneTask',
+      ]),
     },
   }
 </script>

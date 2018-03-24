@@ -13,7 +13,7 @@
     },
     methods: {
       fireDoneTask: function(task, e) {
-        this.$emit('task-done', task, e.target.checked)
+        this.$emit('task-done', {task: task, status: e.target.checked})
       },
     },
   }
