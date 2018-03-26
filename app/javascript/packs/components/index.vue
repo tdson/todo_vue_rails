@@ -47,12 +47,14 @@
       ]),
     },
     methods: {
-      ...mapActions(['showFinishedTasks']),
       ...mapActions('task', [
         'fetchTasks',
         'createTask',
         'doneTask'
       ]),
+      showFinishedTasks () {
+        document.querySelector('#finished-tasks').classList.toggle('display-none')
+      }
     },
   }
 </script>

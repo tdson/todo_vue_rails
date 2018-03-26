@@ -8,10 +8,5 @@ export default new Vuex.Store({
   strict: true,
   modules: {
     task
-  },
-  actions: {
-    showFinishedTasks () {
-      document.querySelector('#finished-tasks').classList.toggle('display-none')
-    }
   }
 })
