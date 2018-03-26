@@ -1,9 +1,13 @@
 export const TASK_FETCHED = 'TASK_FETCHED'
 export const TASK_CREATED = 'TASK_CREATED'
 export const TASK_DONE = 'TASK_DONE'
+export const TASK_DELETED = 'TASK_DELETED'
+export const TASK_UPDATED = 'TASK_UPDATED'
 
 export default {
   TASK_FETCHED,
   TASK_CREATED,
-  TASK_DONE
+  TASK_DONE,
+  TASK_DELETED,
+  TASK_UPDATED
 }
