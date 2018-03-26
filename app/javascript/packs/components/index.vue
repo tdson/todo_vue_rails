@@ -12,13 +12,13 @@
     </div>
     <div id="open-tasks">
       <ul class="collection">
-        <task v-if="!task.is_done" v-for="task in tasks" :key="task.id" :task="task" @task-done="doneTask"></task>
+        <task v-for="task in unfinishedTasks" :key="task.id" :task="task" @task-done="doneTask"></task>
       </ul>
     </div>
     <div class="btn" @click="showFinishedTasks">Show finished tasks</div>
     <div id="finished-tasks" class="display-none">
       <ul class="collection">
-        <task v-if="task.is_done" v-for="task in tasks" :key="task.id" :task="task" @task-done="doneTask"></task>
+        <task v-for="task in finishedTasks" :key="task.id" :task="task" @task-done="doneTask"></task>
       </ul>
     </div>
   </div>
@@ -40,17 +40,18 @@
       this.fetchTasks()
     },
     computed: {
-      // We no need taskList getter so far, Because we use mapState for 'taks'
-      // and get tasks list via this state.
-      ...mapGetters(['taskList']),
-      ...mapState(['tasks', 'newTask']),
+      ...mapState('task', [
+        'unfinishedTasks',
+        'finishedTasks',
+        'newTask'
+      ]),
     },
     methods: {
-      ...mapActions([
+      ...mapActions(['showFinishedTasks']),
+      ...mapActions('task', [
         'fetchTasks',
-        'showFinishedTasks',
         'createTask',
-        'doneTask',
+        'doneTask'
       ]),
     },
   }
