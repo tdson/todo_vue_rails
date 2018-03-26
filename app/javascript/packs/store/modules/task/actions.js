@@ -30,8 +30,31 @@ export const doneTask = (context, payload) => {
     )
 }
 
+export const deleteTask = (context, task) => {
+  axios.delete(`/api/tasks/${task.id}.json`)
+    .then(
+      response => context.commit(mutations.TASK_DELETED, task),
+      error => console.log(error)
+    )
+}
+
+export const updateTask = (context, task) => {
+  let name = prompt('Enter new name', task.name).trim()
+  if (!name) {
+    alert("Name can't be blank!")
+    return null
+  }
+  axios.put(`/api/tasks/${task.id}.json`, {task: {name: name}})
+    .then(
+      response => context.commit(mutations.TASK_UPDATED, response.data.task),
+      error => console.log(error)
+    )
+}
+
 export default {
   fetchTasks,
   createTask,
-  doneTask
+  doneTask,
+  deleteTask,
+  updateTask
 }

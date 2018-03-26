@@ -21,6 +21,15 @@ class Api::TasksController < ApplicationController
     end
   end
 
+  def destroy
+    @task = Task.find_by id: params[:id]
+    if @task.destroy
+      render :destroy, status: :ok
+    else
+      render json: {message: "Delete unsuccessful"}, status: :unprocessable_entity
+    end
+  end
+
   private
   def task_params
     params.require(:task).permit :name, :is_done

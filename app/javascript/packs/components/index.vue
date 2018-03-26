@@ -12,13 +12,15 @@
     </div>
     <div id="open-tasks">
       <ul class="collection">
-        <task v-for="task in unfinishedTasks" :key="task.id" :task="task" @task-done="doneTask"></task>
+        <task v-for="task in unfinishedTasks" :key="task.id" :task="task"
+          @task-done="doneTask" @delete-task="deleteTask" @update-task="updateTask"></task>
       </ul>
     </div>
     <div class="btn" @click="showFinishedTasks">Show finished tasks</div>
     <div id="finished-tasks" class="display-none">
       <ul class="collection">
-        <task v-for="task in finishedTasks" :key="task.id" :task="task" @task-done="doneTask"></task>
+        <task v-for="task in finishedTasks" :key="task.id" :task="task"
+          @task-done="doneTask" @delete-task="deleteTask" @update-task="updateTask"></task>
       </ul>
     </div>
   </div>
@@ -50,7 +52,9 @@
       ...mapActions('task', [
         'fetchTasks',
         'createTask',
-        'doneTask'
+        'doneTask',
+        'deleteTask',
+        'updateTask'
       ]),
       showFinishedTasks () {
         document.querySelector('#finished-tasks').classList.toggle('display-none')
