@@ -33,7 +33,7 @@
     components: {
       Task,
     },
-    data: function () {
+    data: function() {
       return {}
     },
     mounted() {

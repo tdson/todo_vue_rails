@@ -10,20 +10,20 @@ export default new Vuex.Store({
     tasks: [],
     newTask: {
       name: '',
-      is_done: false,
-    },
+      is_done: false
+    }
   },
   actions: {
-    fetchTasks(context) {
+    fetchTasks (context) {
       axios.get('/api/tasks.json')
         .then(response => context.commit('tasksFetched', response.data.tasks))
     },
-    showFinishedTasks() {
-      document.querySelector('#finished-tasks').classList.toggle('display-none');
+    showFinishedTasks () {
+      document.querySelector('#finished-tasks').classList.toggle('display-none')
     },
-    createTask(context, task) {
+    createTask (context, task) {
       if (!task.name) {
-        return
+        return null
       } else {
         axios.post('api/tasks.json', {task: task})
           .then(response => {
@@ -34,9 +34,9 @@ export default new Vuex.Store({
           })
       }
     },
-    doneTask(context, payload) {
-      let id = payload.task.id,
-        data = {task: {is_done: payload.status}}
+    doneTask (context, payload) {
+      let id = payload.task.id
+      let data = {task: {is_done: payload.status}}
       axios.put(`/api/tasks/${id}.json`, data)
         .then(response => {
           context.dispatch('reorderLists', payload)
@@ -44,27 +44,27 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
-    reorderLists: function(context, payload) {
-      let taskID = payload.task.id,
-        isDone = payload.status
+    reorderLists (context, payload) {
+      let taskID = payload.task.id
+      let isDone = payload.status
       let row = document.querySelector(`#row-task-${taskID}`)
       let clonedRow = row.cloneNode(true)
       row.parentNode.removeChild(row)
-      let listID = isDone ? "finished-tasks" : "open-tasks"
+      let listID = isDone ? 'finished-tasks' : 'open-tasks'
       let finishedList = document.querySelector(`#${listID} > ul > li:first-child`)
       document.querySelector(`#${listID} > ul`).insertBefore(clonedRow, finishedList)
-    },
+    }
   },
   mutations: {
-    tasksFetched(state, tasks) {
+    tasksFetched (state, tasks) {
       state.tasks = tasks
-    },
+    }
   },
   getters: {
     // We no need taskList getter so far, Because we use mapState for 'taks'
     // and get tasks list via this state.
     taskList: state => {
       return state.tasks
-    },
-  },
+    }
+  }
 })
