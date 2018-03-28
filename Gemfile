@@ -39,6 +39,7 @@ gem 'jquery-rails'
 gem 'jquery-turbolinks'
 gem 'materialize-sass'
 gem 'material_icons'
+gem 'leaflet-rails', '~> 1.3', '>= 1.3.1'
 
 group :development, :test do
   # Adds support for Capybara system testing and selenium driver

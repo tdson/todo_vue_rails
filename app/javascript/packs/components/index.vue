@@ -23,6 +23,7 @@
           @task-done="doneTask" @delete-task="deleteTask" @update-task="updateTask"></task>
       </ul>
     </div>
+    <div id="map"></div>
   </div>
 </template>
 
@@ -40,6 +41,7 @@
     },
     mounted() {
       this.fetchTasks()
+      this.initMap()
     },
     computed: {
       ...mapState('task', [
@@ -54,12 +56,13 @@
         'createTask',
         'doneTask',
         'deleteTask',
-        'updateTask'
+        'updateTask',
+        'initMap'
       ]),
       showFinishedTasks () {
         document.querySelector('#finished-tasks').classList.toggle('display-none')
       }
-    },
+    }
   }
 </script>
 
@@ -70,5 +73,11 @@
 
   .display-none {
     display: none;
+  }
+
+  #map {
+    height: 400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 </style>

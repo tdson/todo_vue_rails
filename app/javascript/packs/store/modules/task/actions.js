@@ -51,10 +51,21 @@ export const updateTask = (context, task) => {
     )
 }
 
+export const initMap = () => {
+  let map = L.map('map').setView([35.641441, 139.75034250000002], 16)
+  L.tileLayer('https://cm01.mapion.co.jp/m2/tile/{z}/{x}/{y}.png?usr=atlas_org&v=1.1',
+    {
+      maxZoom: 18,
+      attribution: 'test',
+    }
+  ).addTo(map)
+}
+
 export default {
   fetchTasks,
   createTask,
   doneTask,
   deleteTask,
-  updateTask
+  updateTask,
+  initMap
 }
